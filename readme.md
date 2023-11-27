@@ -1,5 +1,9 @@
 # Guessing Game
 
+![Guessing Game](https://i.ibb.co/GtCFLGD/Picture1.png)
+
+Check out the [demo](https://nenorvalls-guessing-game.netlify.app/) here.
+
 Welcome to the Guessing Game! This is a simple web-based guessing game where the player tries to guess a randomly generated number between 1 and 100.
 
 ## How to Play
