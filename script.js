@@ -1,48 +1,60 @@
-// Define Game Parameters
-const lowerLimit = 1;
-const upperLimit = 100;
-let attempts = 5;
+let attempts = 0;
+const minNumber = 1;
+const maxNumber = 100;
+let secretNumber = generateRandomNumber();
 
-// Define Utility Functions
-function generateRandomNumber(lowerLimit, upperLimit) {
-  return Math.floor(Math.random() * (upperLimit - lowerLimit + 1)) + lowerLimit;
+function generateRandomNumber() {
+  return Math.floor(Math.random() * (maxNumber - minNumber + 1)) + minNumber;
 }
 
-function checkGuess(secretNumber, guess) {
-  if (guess === secretNumber) {
-    return "correct";
-  } else if (guess < secretNumber) {
-    return "too low";
+function playGame() {
+  var guessInput = document.getElementById("guessInput");
+  var guess = guessInput.value;
+
+  if (isValidGuess(guess)) {
+    var guessNumber = parseInt(guess);
+
+    if (guessNumber === secretNumber) {
+      alert(
+        "Congratulations! You guessed the number in " + attempts + " attempts"
+      );
+      saveGameResult("Player won in " + attempts + " attempts.");
+
+      // Reset the game
+      attempts = 0;
+      secretNumber = generateRandomNumber();
+      displayResult("New number generated. Start guessing!");
+    } else {
+      attempts++;
+      if (guessNumber < secretNumber) {
+        displayResult("Try higher");
+      } else {
+        displayResult("Try lower");
+      }
+    }
   } else {
-    return "too high";
+    displayResult("Please enter a valid number within the specified range.");
   }
+
+  guessInput.value = "";
 }
 
-function displayResult(result) {
-  const resultElement = document.getElementById("result");
-  resultElement.textContent = `Result: ${result}`;
+function isValidGuess(guess) {
+  return !isNaN(guess) && guess >= 1 && guess <= 100;
+}
+
+function displayResult(message) {
+  document.getElementById("result").innerHTML = message;
+}
+
+function saveGameResult(result) {
+  console.log(result);
 }
 
 function submitGuess() {
-  const userGuess = parseInt(document.getElementById("guessInput").value);
-  const result = checkGuess(secretNumber, userGuess);
-  displayResult(result);
-
-  if (result === "correct") {
-    alert("Congratulations! You guessed the correct number.");
-  } else {
-    attempts--;
-    alert(`Attempts left: ${attempts}`);
-    if (attempts === 0) {
-      alert(
-        `Sorry, you've run out of attempts. The correct number was ${secretNumber}.`
-      );
-    }
-  }
+  playGame();
 }
 
-// Game Logic
-const secretNumber = generateRandomNumber(lowerLimit, upperLimit);
-
-// Start the Game guessing game app
-document.addEventListener("DOMContentLoaded", function () {});
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("guessButton").addEventListener("click", submitGuess);
+});
